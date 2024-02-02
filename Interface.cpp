@@ -208,6 +208,19 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 			buttons[6].setFillColor(sf::Color(52, 53, 65, 200));
 		}
 
+		if (currentFigure != nullptr && list[0] == currentFigure)
+		{
+			currentFigure->setColor(sf::Color::Cyan);
+		}
+		else if (currentFigure != nullptr && list[1] == currentFigure)
+		{
+			currentFigure->setColor(sf::Color::Green);
+		}
+		else if (currentFigure != nullptr && currentFigure == list[2])
+		{
+			currentFigure->setColor(sf::Color::Yellow);
+		}
+
 		currentFigure = composite;
 
 		std::cout << "Button #7" << std::endl;

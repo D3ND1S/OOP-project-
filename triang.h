@@ -29,4 +29,8 @@ public:
 
 	bool check(float x, float y, sf::RenderWindow& window) override;
 
+	bool checkScale(float x, sf::RenderWindow& window) override;
+
+	void updateScale(float x) override;
+
 };

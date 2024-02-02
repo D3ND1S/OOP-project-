@@ -12,7 +12,9 @@ public:
 	Figure() = default;
 
 	virtual Figure* clone() = 0;
-	virtual bool check(float x, float y,sf::RenderWindow& window) { return false; } // повина бути абстрактою
+	virtual bool check(float x, float y, sf::RenderWindow& window) { return false; } // повина бути абстрактою
+	virtual bool checkScale(float x, sf::RenderWindow& window) { return false; } // повина бути абстрактою
+	virtual void updateScale(float x) { }
 	virtual void move(float deltatime, int x, int y, sf::RenderWindow& window) = 0;
 	virtual sf::Vector2f getPosition() { return { 0,0 }; } // повина бути абстрактою
 	virtual sf::FloatRect getbounds() { return sf::FloatRect(); }

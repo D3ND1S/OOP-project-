@@ -43,7 +43,16 @@ void Controller::Upadate(float deltatime)
 	if (currentFigure != nullptr)
 	{
 		currentFigure->Update(deltatime, *window);
-		currentFigure->move(deltatime, autox, autoy, *window);
+
+		if (currentFigure->check(autox, 0, *window))
+		{
+			currentFigure->move(deltatime, autox, 0, *window);
+		}
+
+		if (currentFigure->check(0, autoy, *window))
+		{
+			currentFigure->move(deltatime, 0, autoy, *window);
+		}
 
 		for (int i = 0; i < 3; i++)
 		{

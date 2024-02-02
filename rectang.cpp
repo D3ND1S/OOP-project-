@@ -42,12 +42,12 @@ void rectang::Update(float deltatime, sf::RenderWindow& window)
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B)) {
-
-		rectangle.setScale(rectangle.getScale().x + 0.001, rectangle.getScale().y + 0.001);
+		if (check(rectangle.getScale().x + 0.001, rectangle.getScale().y + 0.001, window))
+			rectangle.setScale(rectangle.getScale().x + 0.001, rectangle.getScale().y + 0.001);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N)) {
-
-		rectangle.setScale(rectangle.getScale().x - 0.001, rectangle.getScale().y - 0.001);
+		if (rectangle.getScale().x > 0.03 && rectangle.getScale().y > 0.03)
+			rectangle.setScale(rectangle.getScale().x - 0.001, rectangle.getScale().y - 0.001);
 	}
 }
 
@@ -124,4 +124,27 @@ bool rectang::check(float x, float y, sf::RenderWindow& window)
 	}
 
 	return true;
+}
+
+bool rectang::checkScale(float x, sf::RenderWindow& window)
+{
+	bool result = true;
+
+	if (x > 0)
+	{
+		if (!check(rectangle.getScale().x + 0.001, rectangle.getScale().y + 0.001, window))
+			return false;
+	}
+	else if (x < 0)
+	{
+		if (rectangle.getScale().x < 0.03 && rectangle.getScale().y < 0.03)
+			return false;
+	}
+
+	return result;
+}
+
+void rectang::updateScale(float x)
+{
+	rectangle.setScale(rectangle.getScale().x + x, rectangle.getScale().y + x);
 }

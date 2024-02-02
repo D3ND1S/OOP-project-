@@ -9,7 +9,7 @@ private:
 	sf::CircleShape circle;
 public:
 
-	Circle(float r, sf::Color color); 
+	Circle(float r, sf::Color color);
 
 	void Update(float deltatime, sf::RenderWindow& window) override;
 
@@ -20,17 +20,21 @@ public:
 	void remove(Figure* a) override {}
 
 	void move(float deltatime, int x, int y, sf::RenderWindow& window) override;
-	
+
 	sf::FloatRect getbounds() override;
-	
-	bool intersect(sf::FloatRect rect) override; 
+
+	bool intersect(sf::FloatRect rect) override;
 
 	void setColor(sf::Color color) override;
 
 	Circle* clone() override;
 
-	bool check(float x, float y,sf::RenderWindow& window) override;
+	bool check(float x, float y, sf::RenderWindow& window) override;
 
-	virtual sf::Vector2f getPosition() override;
+	sf::Vector2f getPosition() override;
+
+	bool checkScale(float x, sf::RenderWindow& window) override;
+
+	void updateScale(float x) override;
 
 };

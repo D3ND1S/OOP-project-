@@ -41,12 +41,12 @@ void Circle::Update(float deltatime, sf::RenderWindow& window)
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B)) {
-
-		circle.setScale(circle.getScale().x + 0.001, circle.getScale().y + 0.001);
+		if (check(circle.getScale().x + 0.001, circle.getScale().y + 0.001, window))
+			circle.setScale(circle.getScale().x + 0.001, circle.getScale().y + 0.001);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N)) {
-
-		circle.setScale(circle.getScale().x - 0.001, circle.getScale().y - 0.001);
+		if (circle.getScale().x > 0.01 && circle.getScale().y > 0.01)
+			circle.setScale(circle.getScale().x - 0.001, circle.getScale().y - 0.001);
 	}
 }
 
@@ -132,7 +132,7 @@ bool Circle::check(float x, float y, sf::RenderWindow& window)
 	if (x > 0)
 	{
 		if (position.x + bounds.width + 5 > windowSize.x) {
-			return false ;
+			return false;
 		}
 	}
 	if (y > 0)
@@ -154,4 +154,27 @@ bool Circle::check(float x, float y, sf::RenderWindow& window)
 sf::Vector2f Circle::getPosition()
 {
 	return circle.getPosition();
+}
+
+bool Circle::checkScale(float x, sf::RenderWindow& window)
+{
+	bool result = true;
+
+	if (x > 0) 
+	{
+		if (!check(circle.getScale().x + 0.001, circle.getScale().y + 0.001, window))
+			return false;
+	}
+	else if (x < 0)
+	{
+		if (circle.getScale().x < 0.01 && circle.getScale().y < 0.01)
+			return false;
+	}
+
+	return result;
+}
+
+void Circle::updateScale(float x)
+{
+	circle.setScale(circle.getScale().x + x, circle.getScale().y + x);
 }

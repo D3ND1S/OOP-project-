@@ -7,10 +7,11 @@ Composite* Composite::clone()
 	{
 		temp->add(elem->clone());
 	}
+	remove(nullptr);
 	return temp;
 }
 
-void Composite::add(Figure* a) // Переробити щоб клон не створювався походу, а вже йшло посилання на клона
+void Composite::add(Figure* a)
 {
 	arr.push_back(a);
 }
@@ -27,8 +28,10 @@ void Composite::remove(Figure* a)
 void Composite::Update(float deltatime, sf::RenderWindow& window)
 {
 	int x, y;
+	float scale;
 
-	x = y = 0;
+	x = y = scale = 0;
+
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
 	{
@@ -47,27 +50,31 @@ void Composite::Update(float deltatime, sf::RenderWindow& window)
 		y = -1;
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B)) {
+
+		scale = 0.001;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N)) {
+
+		scale = -0.001;
+	}
+
 	for (auto& figure : arr)
 	{
 		if (figure->check(0, y * deltatime * 200, window) == false)
-			return;
+			y = 0;
 
 		if (figure->check(x * deltatime * 200, 0, window) == false)
-			return;
+			x = 0;
 
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B)) { // BETA
-
-		//	circle.setScale(circle.getScale().x + 0.001, circle.getScale().y + 0.001);
-		//}
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N)) {
-
-		//   circle.setScale(circle.getScale().x - 0.001, circle.getScale().y - 0.001);
-		//} 
+		if (figure->checkScale(scale, window) == false)
+			scale = 0;
 	}
 
 	for (auto* elem : arr)
 	{
 		elem->move(deltatime, x, y, window);
+		elem->updateScale(scale);
 	}
 }
 
@@ -98,7 +105,19 @@ bool Composite::check(float x, float y, sf::RenderWindow& window)
 	for (auto& figure : arr)
 	{
 		result = figure->check(x, y, window);
-		if (result = false)
+		if (result == false)
+			return false;
+	}
+	return result;
+}
+
+bool Composite::checkScale(float x, sf::RenderWindow& window)
+{
+	bool result = true;
+	for (auto& figure : arr)
+	{
+		result = figure->checkScale(x, window);
+		if (result == false)
 			return false;
 	}
 	return result;

@@ -45,12 +45,12 @@ void triang::Update(float deltatime, sf::RenderWindow& window)
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B)) {
-
-		triangle.setScale(triangle.getScale().x + 0.001, triangle.getScale().y + 0.001);
+		if (check(triangle.getScale().x + 0.001, triangle.getScale().y + 0.001, window))
+			triangle.setScale(triangle.getScale().x + 0.001, triangle.getScale().y + 0.001);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N)) {
-
-		triangle.setScale(triangle.getScale().x - 0.001, triangle.getScale().y - 0.001);
+		if (triangle.getScale().x > 0.05 && triangle.getScale().y > 0.05)
+			triangle.setScale(triangle.getScale().x - 0.001, triangle.getScale().y - 0.001);
 	}
 }
 
@@ -69,7 +69,7 @@ void triang::move(float deltatime, int x, int y, sf::RenderWindow& window)
 	sf::FloatRect bounds = triangle.getGlobalBounds();
 
 	int MoveSpeed = 200;
-	
+
 	triangle.move(x * deltatime * MoveSpeed, y * deltatime * MoveSpeed);
 }
 
@@ -129,4 +129,27 @@ bool triang::check(float x, float y, sf::RenderWindow& window)
 	}
 
 	return true;
+}
+
+bool triang::checkScale(float x, sf::RenderWindow& window)
+{
+	bool result = true;
+
+	if (x > 0)
+	{
+		if (!check(triangle.getScale().x + 0.001, triangle.getScale().y + 0.001, window))
+			return false;
+	}
+	else if (x < 0)
+	{
+		if (triangle.getScale().x < 0.05 && triangle.getScale().y < 0.05)
+			return false;
+	}
+
+	return result;
+}
+
+void triang::updateScale(float x)
+{
+	triangle.setScale(triangle.getScale().x + x, triangle.getScale().y + x);
 }

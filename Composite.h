@@ -21,4 +21,6 @@ public:
 	~Composite();
 
 	bool check(float x, float y, sf::RenderWindow& window) override;
+
+	bool checkScale(float x, sf::RenderWindow& window) override;
 };
