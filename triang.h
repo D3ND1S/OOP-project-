@@ -27,4 +27,6 @@ public:
 
 	triang* clone() override;
 
+	bool check(float x, float y, sf::RenderWindow& window) override;
+
 };

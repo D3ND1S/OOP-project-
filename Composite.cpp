@@ -5,35 +5,69 @@ Composite* Composite::clone()
 	Composite* temp = new Composite();
 	for (Figure* elem : arr)
 	{
-		temp->add(elem);
+		temp->add(elem->clone());
 	}
 	return temp;
 }
 
-void Composite::add(Figure* a)
+void Composite::add(Figure* a) // Переробити щоб клон не створювався походу, а вже йшло посилання на клона
 {
-	arr.push_back(a->clone());
+	arr.push_back(a);
 }
 
 void Composite::remove(Figure* a)
 {
-	int iterator = 0;
-	for (int i = 0; i < arr.size(); i++)
+	for (auto& figure : arr)
 	{
-		if (arr[i] == a)
-		{
-			iterator = i;
-			break;
-		}
+		figure->remove(nullptr);
+		arr.clear();
 	}
-	arr.erase(arr.begin() + iterator);
 }
 
 void Composite::Update(float deltatime, sf::RenderWindow& window)
 {
-	for (Figure* elem : arr)
+	int x, y;
+
+	x = y = 0;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
 	{
-		elem->Update(deltatime, window);
+		x = -1;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+	{
+		x = 1;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+	{
+		y = 1;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+	{
+		y = -1;
+	}
+
+	for (auto& figure : arr)
+	{
+		if (figure->check(0, y * deltatime * 200, window) == false)
+			return;
+
+		if (figure->check(x * deltatime * 200, 0, window) == false)
+			return;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B)) { // BETA
+
+		//	circle.setScale(circle.getScale().x + 0.001, circle.getScale().y + 0.001);
+		//}
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N)) {
+
+		//   circle.setScale(circle.getScale().x - 0.001, circle.getScale().y - 0.001);
+		//} 
+	}
+
+	for (auto* elem : arr)
+	{
+		elem->move(deltatime, x, y, window);
 	}
 }
 
@@ -55,8 +89,17 @@ void Composite::move(float deltatime, int x, int y, sf::RenderWindow& window)
 
 Composite::~Composite()
 {
-	for (Figure* elem : arr)
+	remove(nullptr);
+}
+
+bool Composite::check(float x, float y, sf::RenderWindow& window)
+{
+	bool result = true;
+	for (auto& figure : arr)
 	{
-		delete elem;
+		result = figure->check(x, y, window);
+		if (result = false)
+			return false;
 	}
+	return result;
 }

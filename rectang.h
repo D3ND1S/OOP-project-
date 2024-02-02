@@ -29,5 +29,7 @@ public:
 	void setColor(sf::Color color) override;
 
 	rectang* clone() override;
+
+	bool check(float x, float y, sf::RenderWindow& window) override;
 	
 };

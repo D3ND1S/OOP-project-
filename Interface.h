@@ -8,8 +8,8 @@ class Interface
 {
 private:
 
-	sf::RectangleShape buttons[6];
-	sf::Text text[6];
+	sf::RectangleShape buttons[7];
+	sf::Text text[7];
 	sf::Text temp;
 	sf::RectangleShape* currentbutton;
 

@@ -69,31 +69,8 @@ void triang::move(float deltatime, int x, int y, sf::RenderWindow& window)
 	sf::FloatRect bounds = triangle.getGlobalBounds();
 
 	int MoveSpeed = 200;
-
-	if (x < 0)
-	{
-		if (position.x > 5) {
-			triangle.move(x * deltatime * MoveSpeed, 0);
-		}
-	}
-	if (x > 0)
-	{
-		if (position.x + bounds.width + 5 < windowSize.x) {
-			triangle.move(x * deltatime * MoveSpeed, 0);
-		}
-	}
-	if (y > 0)
-	{
-		if (position.y + bounds.height + 5 < windowSize.y) {
-			triangle.move(0, y * deltatime * MoveSpeed);
-		}
-	}
-	if (y < 0)
-	{
-		if (position.y > 5) {
-			triangle.move(0, y * deltatime * MoveSpeed);
-		}
-	}
+	
+	triangle.move(x * deltatime * MoveSpeed, y * deltatime * MoveSpeed);
 }
 
 sf::FloatRect triang::getbounds()
@@ -113,5 +90,43 @@ void triang::setColor(sf::Color color)
 
 triang* triang::clone()
 {
-	return new triang(color);
+	triang* clone = new triang(color);
+	clone->triangle = this->triangle;
+	return clone;
+}
+
+bool triang::check(float x, float y, sf::RenderWindow& window)
+{
+
+	sf::Vector2u windowSize = window.getSize();
+
+	sf::Vector2f position = triangle.getPosition();
+	sf::FloatRect bounds = triangle.getGlobalBounds();
+
+	if (x < 0)
+	{
+		if (position.x < 5) {
+			return false;
+		}
+	}
+	if (x > 0)
+	{
+		if (position.x + bounds.width + 5 > windowSize.x) {
+			return false;
+		}
+	}
+	if (y > 0)
+	{
+		if (position.y + bounds.height + 5 > windowSize.y) {
+			return false;
+		}
+	}
+	if (y < 0)
+	{
+		if (position.y < 5) {
+			return false;
+		}
+	}
+
+	return true;
 }

@@ -55,7 +55,7 @@ void Circle::draw(sf::RenderWindow& window)
 	window.draw(circle);
 }
 
-void Circle::move(float deltatime, int x, int y, sf::RenderWindow& window)
+void Circle::move(float deltatime, int x, int y, sf::RenderWindow& window) // Подалі замінити на check, або просто переміщення без перевірки
 {
 	sf::Vector2u windowSize = window.getSize();
 
@@ -64,7 +64,9 @@ void Circle::move(float deltatime, int x, int y, sf::RenderWindow& window)
 
 	int MoveSpeed = 200;
 
-	if (x < 0)
+	circle.move(x * deltatime * MoveSpeed, y * deltatime * MoveSpeed);
+
+	/*if (x < 0)
 	{
 		if (position.x > 5) {
 			circle.move(x * deltatime * MoveSpeed, 0);
@@ -87,7 +89,7 @@ void Circle::move(float deltatime, int x, int y, sf::RenderWindow& window)
 		if (position.y > 5) {
 			circle.move(0, y * deltatime * MoveSpeed);
 		}
-	}
+	}*/
 
 }
 
@@ -108,5 +110,48 @@ void Circle::setColor(sf::Color color)
 
 Circle* Circle::clone()
 {
-	return new Circle(r, color);
+	Circle* clone = new Circle(r, color);
+	clone->circle = this->circle;
+	return clone;
+}
+
+bool Circle::check(float x, float y, sf::RenderWindow& window)
+{
+	sf::Vector2u windowSize = window.getSize();
+
+	sf::Vector2f position = circle.getPosition();
+	sf::FloatRect bounds = circle.getGlobalBounds();
+
+
+	if (x < 0)
+	{
+		if (position.x < 5) {
+			return false;
+		}
+	}
+	if (x > 0)
+	{
+		if (position.x + bounds.width + 5 > windowSize.x) {
+			return false ;
+		}
+	}
+	if (y > 0)
+	{
+		if (position.y + bounds.height + 5 > windowSize.y) {
+			return false;
+		}
+	}
+	if (y < 0)
+	{
+		if (position.y < 5) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+sf::Vector2f Circle::getPosition()
+{
+	return circle.getPosition();
 }

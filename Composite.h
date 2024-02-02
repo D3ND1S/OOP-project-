@@ -19,4 +19,6 @@ public:
 	void move(float deltatime, int x, int y, sf::RenderWindow& window);
 
 	~Composite();
+
+	bool check(float x, float y, sf::RenderWindow& window) override;
 };

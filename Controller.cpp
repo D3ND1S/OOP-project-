@@ -54,7 +54,6 @@ void Controller::Upadate(float deltatime)
 				{
 					currentFigure->setColor(sf::Color(255, 16, 83));
 				}
-
 			}
 		}
 
@@ -73,6 +72,8 @@ void Controller::Draw()
 		if (ptr != nullptr)
 			ptr->draw(*window);
 	}
+
+	composite->draw(*window);
 
 	window->display();
 }

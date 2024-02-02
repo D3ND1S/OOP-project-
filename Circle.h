@@ -29,4 +29,8 @@ public:
 
 	Circle* clone() override;
 
+	bool check(float x, float y,sf::RenderWindow& window) override;
+
+	virtual sf::Vector2f getPosition() override;
+
 };
