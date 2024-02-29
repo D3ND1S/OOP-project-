@@ -7,7 +7,6 @@ Composite* Composite::clone()
 	{
 		temp->add(elem->clone());
 	}
-	remove(nullptr);
 	return temp;
 }
 

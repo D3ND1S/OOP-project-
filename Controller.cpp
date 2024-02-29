@@ -1,6 +1,6 @@
 #include "Controller.h"
 
-Controller::Controller(sf::RenderWindow& window, sf::Font* font) : window(&window), font(font), autox(0), autoy(0)
+Controller::Controller(sf::RenderWindow& window, sf::Font* font) : window(&window), font(font), autox(0), autoy(0), currentpos(0)
 {
 	composite = new Composite();
 	inter = new Interface(font);
@@ -15,6 +15,7 @@ Controller::~Controller()
 			delete list[i];
 		list[i] = nullptr;
 	}
+	composites.clear();
 	delete inter;
 }
 
@@ -32,7 +33,7 @@ void Controller::HandleInput()
 		}
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
-			inter->Update(mousePosition, currentFigure, list, autox, autoy, composite);
+			inter->Update(mousePosition, currentFigure, list, autox, autoy, composite, composites, currentpos);
 		}
 	}
 
@@ -80,6 +81,11 @@ void Controller::Draw()
 	{
 		if (ptr != nullptr)
 			ptr->draw(*window);
+	}
+
+	for (auto elem : composites)
+	{
+		elem->draw(*window);
 	}
 
 	composite->draw(*window);

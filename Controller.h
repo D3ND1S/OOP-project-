@@ -9,8 +9,10 @@ private:
 	sf::RenderWindow* window;
 	sf::Vector2i mousePosition;
 	sf::Font* font;
+	std::vector<Figure*> composites;
 	Interface* inter;
 	float autox, autoy;
+	int currentpos;
 	Composite* composite;
 
 public:
