@@ -33,7 +33,7 @@ void Controller::HandleInput()
 		}
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
-			inter->Update(mousePosition, currentFigure, list, autox, autoy, composite, composites, currentpos);
+			inter->Update(mousePosition, currentFigure, list, autox, autoy, composite, composites, currentpos, protopype);
 		}
 	}
 

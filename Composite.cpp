@@ -121,3 +121,11 @@ bool Composite::checkScale(float x, sf::RenderWindow& window)
 	}
 	return result;
 }
+
+void Composite::setColor(sf::Color color)
+{
+	for (auto* elem : arr)
+	{
+		elem->setColor(color);
+	}
+}

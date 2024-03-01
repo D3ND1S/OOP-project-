@@ -31,6 +31,19 @@ Interface::Interface(sf::Font* font)
 	buttons[8].setOutlineColor(sf::Color(107, 107, 127));
 	buttons[8].setOutlineThickness(4);
 
+	buttons[9] = sf::RectangleShape(sf::Vector2f(130, 65));
+	buttons[9].setFillColor(sf::Color(52, 53, 65));
+	buttons[9].setPosition(40, 120);
+	buttons[9].setOutlineColor(sf::Color(107, 107, 127));
+	buttons[9].setOutlineThickness(4);
+
+
+	buttons[10] = sf::RectangleShape(sf::Vector2f(130, 65));
+	buttons[10].setFillColor(sf::Color(52, 53, 65));
+	buttons[10].setPosition(210, 120);
+	buttons[10].setOutlineColor(sf::Color(107, 107, 127));
+	buttons[10].setOutlineThickness(4);
+
 	text[0].setString("Circle");
 	text[0].setPosition(85, 50);
 
@@ -58,7 +71,13 @@ Interface::Interface(sf::Font* font)
 	text[8].setString("Next composite");
 	text[8].setPosition(735, 145);
 
-	for (int i = 0; i < 9; i++)
+	text[9].setString("Save to prototype");
+	text[9].setPosition(45, 145);
+
+	text[10].setString("Load prototype");
+	text[10].setPosition(225, 145);
+
+	for (int i = 0; i < 11; i++)
 	{
 		text[i].setFont(*font); // Встановлення шрифту для тексту
 		text[i].setCharacterSize(14); // Розмір символів тексту
@@ -66,7 +85,8 @@ Interface::Interface(sf::Font* font)
 	}
 }
 
-void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figure* list[3], float& x, float& y, Composite* composite, std::vector<Figure*>& composites,int& currentpos)
+void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figure* list[3], float& x, float& y, Composite* composite, std::vector<Figure*>& composites, int& currentpos
+	, Prototype& prot)
 {
 	if (buttons[0].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
 	{
@@ -197,6 +217,8 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 
 		composites.clear();
 
+		prot.erase("all");
+
 		std::cout << "Button #5" << std::endl;
 	}
 	if (buttons[5].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
@@ -249,7 +271,7 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 
 	if (buttons[7].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
 	{
-	
+
 		if (currentFigure != nullptr && list[0] == currentFigure)
 		{
 			currentFigure->setColor(sf::Color::Cyan);
@@ -313,11 +335,61 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 
 		std::cout << "Button #9" << std::endl;
 	}
+
+	if (buttons[9].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
+	{
+
+		if (currentFigure != nullptr && list[0] == currentFigure)
+		{
+			currentFigure->setColor(sf::Color::Cyan);
+		}
+		else if (currentFigure != nullptr && list[1] == currentFigure)
+		{
+			currentFigure->setColor(sf::Color::Green);
+		}
+		else if (currentFigure != nullptr && currentFigure == list[2])
+		{
+			currentFigure->setColor(sf::Color::Yellow);
+		}
+		std::string name;
+		std::cout << "Input name for prototype" << std::endl;
+		std::cin >> name;
+		if (currentFigure != nullptr)
+			prot.add(name, currentFigure);
+
+		std::cout << "Button #10" << std::endl;
+	}
+
+
+	if (buttons[10].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
+	{
+
+		if (currentFigure != nullptr && list[0] == currentFigure)
+		{
+			currentFigure->setColor(sf::Color::Cyan);
+		}
+		else if (currentFigure != nullptr && list[1] == currentFigure)
+		{
+			currentFigure->setColor(sf::Color::Green);
+		}
+		else if (currentFigure != nullptr && currentFigure == list[2])
+		{
+			currentFigure->setColor(sf::Color::Yellow);
+		}
+		
+		std::string key;
+		prot.print();
+		std::cout << "Input key" << std::endl;
+		std::cin >> key;
+		composites.push_back(prot.load(key)->clone());
+
+		std::cout << "Button #11" << std::endl;
+	}
 }
 
 void Interface::draw(sf::RenderWindow& window)
 {
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 11; i++)
 	{
 		window.draw(buttons[i]);
 		window.draw(text[i]);

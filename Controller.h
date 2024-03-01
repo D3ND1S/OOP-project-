@@ -1,5 +1,6 @@
 #pragma once
 #include "Interface.h"
+#include "Prototype.h"
 
 class Controller
 {
@@ -14,6 +15,7 @@ private:
 	float autox, autoy;
 	int currentpos;
 	Composite* composite;
+	Prototype protopype;
 
 public:
 
