@@ -16,6 +16,7 @@ private:
 	int currentpos;
 	Composite* composite;
 	Prototype protopype;
+	CareTaker careTaker;
 
 public:
 
@@ -28,4 +29,8 @@ public:
 	void Upadate(float deltatime);
 
 	void Draw();
+
+	void set_memento(Memento& memento) const;
+
+	void get_memento(Memento& memento);
 };

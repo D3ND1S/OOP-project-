@@ -20,12 +20,15 @@ void Prototype::erase(std::string key)
 	map.erase(key);
 }
 
-void Prototype::print()
+bool Prototype::print()
 {
+	bool condition = false;
 	for (auto& elem : map)
 	{
 		std::cout << elem.first << std::endl;
+		condition = true;
 	}
+	return condition;
 }
 
 

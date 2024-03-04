@@ -16,7 +16,7 @@ public:
 
 	void erase(std::string key);
 
-	void print();
+	bool print();
 
 
 };

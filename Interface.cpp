@@ -15,7 +15,7 @@ Interface::Interface(sf::Font* font)
 
 	buttons[6] = sf::RectangleShape(sf::Vector2f(130, 65));
 	buttons[6].setFillColor(sf::Color(52, 53, 65));
-	buttons[6].setPosition(550, 120);
+	buttons[6].setPosition(720, 120);
 	buttons[6].setOutlineColor(sf::Color(107, 107, 127));
 	buttons[6].setOutlineThickness(4);
 
@@ -27,7 +27,7 @@ Interface::Interface(sf::Font* font)
 
 	buttons[8] = sf::RectangleShape(sf::Vector2f(130, 65));
 	buttons[8].setFillColor(sf::Color(52, 53, 65));
-	buttons[8].setPosition(720, 120);
+	buttons[8].setPosition(550, 120);
 	buttons[8].setOutlineColor(sf::Color(107, 107, 127));
 	buttons[8].setOutlineThickness(4);
 
@@ -37,12 +37,17 @@ Interface::Interface(sf::Font* font)
 	buttons[9].setOutlineColor(sf::Color(107, 107, 127));
 	buttons[9].setOutlineThickness(4);
 
-
 	buttons[10] = sf::RectangleShape(sf::Vector2f(130, 65));
 	buttons[10].setFillColor(sf::Color(52, 53, 65));
 	buttons[10].setPosition(210, 120);
 	buttons[10].setOutlineColor(sf::Color(107, 107, 127));
 	buttons[10].setOutlineThickness(4);
+
+	buttons[11] = sf::RectangleShape(sf::Vector2f(130, 65));
+	buttons[11].setFillColor(sf::Color(52, 53, 65));
+	buttons[11].setPosition(890, 120);
+	buttons[11].setOutlineColor(sf::Color(107, 107, 127));
+	buttons[11].setOutlineThickness(4);
 
 	text[0].setString("Circle");
 	text[0].setPosition(85, 50);
@@ -62,14 +67,14 @@ Interface::Interface(sf::Font* font)
 	text[5].setString("Auto Move");
 	text[5].setPosition(920, 50);
 
-	text[6].setString("Composite");
-	text[6].setPosition(580, 145);
+	text[6].setString("Save to memento");
+	text[6].setPosition(730, 145);
 
 	text[7].setString("Finish composite");
 	text[7].setPosition(390, 145);
 
 	text[8].setString("Next composite");
-	text[8].setPosition(735, 145);
+	text[8].setPosition(565, 145);
 
 	text[9].setString("Save to prototype");
 	text[9].setPosition(45, 145);
@@ -77,7 +82,10 @@ Interface::Interface(sf::Font* font)
 	text[10].setString("Load prototype");
 	text[10].setPosition(225, 145);
 
-	for (int i = 0; i < 11; i++)
+	text[11].setString("Load memento");
+	text[11].setPosition(905, 145);
+
+	for (int i = 0; i < 12; i++)
 	{
 		text[i].setFont(*font); // Встановлення шрифту для тексту
 		text[i].setCharacterSize(14); // Розмір символів тексту
@@ -86,7 +94,7 @@ Interface::Interface(sf::Font* font)
 }
 
 void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figure* list[3], float& x, float& y, Composite* composite, std::vector<Figure*>& composites, int& currentpos
-	, Prototype& prot)
+	, Prototype& prot, CareTaker& careTaker, Controller& controller)
 {
 	if (buttons[0].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
 	{
@@ -197,16 +205,10 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 	}
 	if (buttons[4].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
 	{
-		if (currentbutton == nullptr)
-		{
-			currentbutton = &buttons[4];
-			buttons[4].setFillColor(sf::Color(52, 53, 65, 200));
-		}
-		else
+		if (currentbutton != nullptr)
 		{
 			currentbutton->setFillColor(sf::Color(52, 53, 65));
 			currentbutton = &buttons[4];
-			buttons[4].setFillColor(sf::Color(52, 53, 65, 200));
 		}
 
 		list[0] = nullptr;
@@ -236,19 +238,9 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 
 		std::cout << "Button #6" << std::endl;
 	}
+
 	if (buttons[6].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
 	{
-		if (currentbutton == nullptr)
-		{
-			currentbutton = &buttons[6];
-			buttons[6].setFillColor(sf::Color(52, 53, 65, 200));
-		}
-		else
-		{
-			currentbutton->setFillColor(sf::Color(52, 53, 65));
-			currentbutton = &buttons[6];
-			buttons[6].setFillColor(sf::Color(52, 53, 65, 200));
-		}
 
 		if (currentFigure != nullptr && list[0] == currentFigure)
 		{
@@ -263,11 +255,10 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 			currentFigure->setColor(sf::Color::Yellow);
 		}
 
-		currentFigure = composite;
+		careTaker.save_state(controller);
 
 		std::cout << "Button #7" << std::endl;
 	}
-
 
 	if (buttons[7].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
 	{
@@ -326,7 +317,7 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 			currentFigure = composites[currentpos];
 			currentpos++;
 		}
-		else
+		else if (composites.size() != 0)
 		{
 			currentpos = 0;
 			std::cout << currentpos << std::endl;
@@ -376,20 +367,36 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 		{
 			currentFigure->setColor(sf::Color::Yellow);
 		}
-		
+
 		std::string key;
-		prot.print();
-		std::cout << "Input key" << std::endl;
-		std::cin >> key;
-		composites.push_back(prot.load(key)->clone());
+		if (prot.print())
+		{
+			std::cout << "Input key" << std::endl;
+			std::cin >> key;
+			composites.push_back(prot.load(key)->clone());
+		}
 
 		std::cout << "Button #11" << std::endl;
+	}
+
+	if (buttons[11].getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseposition)))
+	{
+
+		if (currentbutton != nullptr)
+		{
+			currentbutton->setFillColor(sf::Color(52, 53, 65));
+			currentbutton = &buttons[4];
+		}
+
+		careTaker.load_state(controller);
+
+		std::cout << "Button #12" << std::endl;
 	}
 }
 
 void Interface::draw(sf::RenderWindow& window)
 {
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		window.draw(buttons[i]);
 		window.draw(text[i]);
