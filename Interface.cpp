@@ -388,7 +388,16 @@ void Interface::Update(sf::Vector2i mouseposition, Figure*& currentFigure, Figur
 			currentbutton = &buttons[4];
 		}
 
+		composite->remove(nullptr);
+
+		composites.clear();
+
+		prot.erase("all");
+
+		currentFigure = nullptr;
+
 		careTaker.load_state(controller);
+
 
 		std::cout << "Button #12" << std::endl;
 	}

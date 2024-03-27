@@ -10,5 +10,15 @@ private:
 	std::vector<Figure*> composites;
 public:
 	friend Controller;
+
+	~Memento()
+	{
+		delete[] list;
+		for (auto elem : composites)
+		{
+			delete elem;
+		}
+		composites.clear();
+	}
 };
 

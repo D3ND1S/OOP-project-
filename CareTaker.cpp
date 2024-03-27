@@ -12,7 +12,7 @@ void CareTaker::save_state(const Controller& cont)
         return;
     }
 
-    outFile.write(reinterpret_cast<const char*>(this), sizeof(Memento));
+    outFile.write(reinterpret_cast<const char*>(&memento), sizeof(Memento));
     outFile.close();
 
 }
@@ -26,7 +26,8 @@ void CareTaker::load_state(Controller& cont)
     }
 
     inFile.read(reinterpret_cast<char*>(&memento), sizeof(Memento));
-    inFile.close();
 
 	cont.get_memento(memento);
+
+    inFile.close();
 }

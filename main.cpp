@@ -17,6 +17,12 @@ int main()
 		return 0;
 	}
 
+	sf::RenderWindow* ptr = &Singleton::getInstance();
+	std::cout << "First prt : " << ptr << std::endl;
+	ptr = &Singleton::getInstance();
+	std::cout << "Second prt : " << ptr << std::endl;
+
+
 	Controller contr(Singleton::getInstance(), &font);
 
 	while (Singleton::getInstance().isOpen())

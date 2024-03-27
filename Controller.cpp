@@ -33,7 +33,7 @@ void Controller::HandleInput()
 		}
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
-			inter->Update(mousePosition, currentFigure, list, autox, autoy, composite, composites, currentpos, protopype, careTaker,*this);
+			inter->Update(mousePosition, currentFigure, list, autox, autoy, composite, composites, currentpos, protopype, careTaker, *this);
 		}
 	}
 
@@ -96,14 +96,21 @@ void Controller::Draw()
 void Controller::set_memento(Memento& memento) const
 {
 	if (list[0] != nullptr)
+	{
 		memento.list[0] = list[0]->clone();
+	}
 
 	if (list[1] != nullptr)
+	{
 		memento.list[1] = list[1]->clone();
+	}
 
 	if (list[2] != nullptr)
+	{
 		memento.list[2] = list[2]->clone();
+	}
 
+	memento.composites.clear();
 	for (auto& elem : composites)
 	{
 		memento.composites.push_back(elem->clone());
@@ -116,17 +123,33 @@ void Controller::get_memento(Memento& memento)
 {
 	if (memento.list[0] != nullptr)
 		list[0] = memento.list[0]->clone();
+	else
+	{
+		delete list[0];
+		list[0] = nullptr;
+	}
 
 	if (memento.list[1] != nullptr)
 		list[1] = memento.list[1]->clone();
+	else
+	{
+		delete list[1];
+		list[1] = nullptr;
+	}
 
 	if (memento.list[2] != nullptr)
 		list[2] = memento.list[2]->clone();
+	else
+	{
+		delete list[2];
+		list[2] = nullptr;
+	}
 
 	composites.clear();
 	for (auto& elem : memento.composites)
 	{
-		composites.push_back(elem->clone());
+		if (elem != nullptr)
+			composites.push_back(elem->clone());
 	}
 	// Присвоювання з мементо 
 }
